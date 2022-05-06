@@ -1,0 +1,63 @@
+﻿@inject IJSRuntime JS
+
+<header id="welcome" class="d-flex justify-content-center align-items-center">
+    <div id="window" class="d-flex flex-column position-relative">
+        <!-- TRIANGLES -->
+        <img src="img/orangeTriangle.svg"
+             alt="orange triangle" width="50" height="50"
+             class="triangle orange position-absolute" />
+        <img src="img/redTriangle.svg"
+             alt="red triangle" width="50" height="50"
+             class="triangle red position-absolute" />
+        <img src="img/redTriangle.svg"
+             alt="red triangle" width="50" height="50"
+             class="triangle red position-absolute" />
+        <img src="img/blueTriangle.svg"
+             alt="blue triangle" width="50" height="50"
+             class="triangle blue position-absolute" />
+        <!-- END TRIANGLES -->
+        <div id="blurredBackground"
+             class="position-absolute flex-grow-1"></div>
+        <div class="d-flex flex-column w-100 h-100">
+            <div id="titleBar" class="d-flex align-items-center">
+                <div class="rounded-circle ml-4"></div>
+                <div class="rounded-circle ml-2"></div>
+                <div class="rounded-circle ml-2"></div>
+            </div>
+            <div id="workingArea"
+                 class="
+                            d-flex
+                            flex-grow-1 flex-column
+                            justify-content-center
+                            align-items-center
+                            mt-4
+                            mb-4
+                        ">
+                <h1>Radosław Kisiel</h1>
+                <h3>Junior .Net developer</h3>
+                <p class="mt-4 p-3 pl-sm-4 pr-sm-4">
+                    Hey there, my name is Radek and I'm junior .Net developer from Poland.
+                    I have a passion for creating web/mobile/desktop applications.
+                </p>
+                <div id="startBttn"
+                     class="
+                                d-flex
+                                justify-content-center
+                                align-items-center
+                                mt-4 mt-md-5
+                            " @onclick="LetsStart">
+                    Let's start!
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+@code {
+
+
+    private async Task LetsStart()
+    {
+        await JS.InvokeVoidAsync("ScrollToSection", "about");
+    }
+}

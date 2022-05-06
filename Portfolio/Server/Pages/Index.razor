@@ -1,0 +1,179 @@
+﻿@page "/"
+@using Portfolio.Server.Shared
+
+@inject IJSRuntime JS
+
+<Header />
+<main class="d-flex flex-column justify-content-center align-items-center">
+    <article id="about" class="mb-5 pt-4 pb-4">
+        <section class="
+                        d-flex
+                        flex-column flex-xl-row
+                        justify-content-center
+                    ">
+            <div id="mySkills">
+                <HeaderCard Title="My Skills">
+                    <p class="m-3 mr-xl-4">
+                        I started out with Python, but switched to Javascript after a short time. Throughout high school, I was creating websites and internet applications. During this period,
+                        I managed to get to know/learn such technologies as HTML, CSS, JS, NodeJs, PHP, ReactJS. Currently, for 2 years I have been studying computer science at WULS, where I learned C#.NET and
+                        MsSql at an advanced level. Since then, I regularly create applications based on .NET, especially on Blazor.
+                    </p>
+                </HeaderCard>
+                <div class="
+                                d-flex
+                                flex-column flex-sm-row
+                                justify-content-center
+                                align-items-center align-content-center
+                                flex-wrap
+                                mt-4 mt-xl-5
+                                ml-auto
+                                mr-auto
+                            ">
+                    <div class="skillBarContainer mt-4 mt-xl-0 mr-sm-3">
+                        <SkillBar ID="html" Title="Html" />
+                        <SkillBar ID="css" Title="Css" />
+                    </div>
+
+                    <div class="skillBarContainer mt-sm-4 mt-xl-0">
+                        <SkillBar ID="javascript" Title="Javascript" />
+                        <SkillBar ID="react" Title="React" />
+                    </div>
+
+                    <div class="skillBarContainer mr-sm-3">
+                        <SkillBar ID="cs" Title="C#.NET" />
+                        <SkillBar ID="blazor" Title="Blazor" />
+                    </div>
+
+                    <div class="skillBarContainer">
+                        <SkillBar ID="php" Title="PHP" />
+                        <SkillBar ID="mssql" Title="Ms SQL" />
+                    </div>
+                </div>
+            </div>
+            <div id="aboutMe" class="mt-4 mt-xl-0 ml-xl-5">
+                <HeaderCard Title="About me">
+                    <p class="m-3 mr-xl-4">
+                        I am a very punctual person, willing to learn, conscientious and, above all, working well in a team. I started my life as a programmer 5 years ago.
+                        More precisely, it was 8 when I wanted to create my own plugin for the Minecraft server (I quickly pulled back when I saw it was more than a few clicks &#x1F604;).
+                        However, it was this moment that started my desire to expand my knowledge of programming and modern technologies. I plan to base my future on the IT market.
+                    </p>
+                </HeaderCard>
+                <div id="barContainer"
+                     class="
+                                d-flex
+                                justify-content-center
+                                align-items-center
+                                flex-wrap
+                                mt-4 mt-xl-5
+                                ml-auto
+                                mr-auto
+                            ">
+                    <ProgressCircle Title="Leadership" Progress="70" />
+                    <ProgressCircle Title="Teamwork" Progress="90" />
+                    <ProgressCircle Title="Will to learn" Progress="100" />
+                </div>
+            </div>
+        </section>
+    </article>
+    <!-- PROJECTS -->
+    <article id="myProjects" class="mb-5">
+        <section class="
+                        d-flex
+                        flex-column
+                        align-items-center
+                        justify-content-center
+                        pt-5
+                    ">
+            <HeaderCard Title="My projects">
+                <p class="m-3 m-xl-4">
+                    Below are the projects that I think I can boast of.
+                    The colored bar represents the most used technology.
+                    Contact me if you want to see more &#x1F642;.
+                </p>
+            </HeaderCard>
+            <div id="categoryContainer"
+                 class="
+                            d-flex
+                            justify-content-around
+                            align-items-center
+                            w-100
+                            mt-5
+                            mb-2 mb-md-4
+                        ">
+                <h5 class="category @(visibleWeb == true ? "active":"")" @onclick="ShowWeb">Web</h5>
+                <h5 class="category @(visibleDesktop == true ? "active":"")" @onclick="ShowDesktop">Desktop</h5>
+                <h5 class="category @(visibleMobile == true ? "active":"")" @onclick="ShowMobile">Mobile</h5>
+            </div>
+            <div id="projectsContainer">
+                <div>
+                    <WebProjects Visible="visibleWeb" @ref="webProjects" OnLoadedProjects="() => { disabledMoreBttn = true; }"/>
+                    <DesktopProjects Visible="visibleDesktop" @ref="desktopProjects" OnLoadedProjects="()=> { disabledMoreBttn = true; }"/>
+                    <MobileProjects Visible="visibleMobile" @ref="mobileProjects" OnLoadedProjects="()=> { disabledMoreBttn = true; }" />
+                </div>
+
+                <div id="moreBttn" class="@(disabledMoreBttn?"disabled":"") mt-4 ml-auto mr-auto" @onclick="ShowMoreProjects">
+                    More
+                </div>
+            </div>
+        </section>
+    </article>
+    <!-- END PROJECTS -->
+    <!-- CONTACT FORM -->
+    <ContactForm />
+    <!-- END CONTACT FORM-->
+</main>
+<!-- FOOTER -->
+<Footer />
+<!-- END FOOTER -->
+
+
+@code{
+    private bool visibleWeb = true;
+    private bool visibleDesktop = false;
+    private bool visibleMobile = false;
+
+    private int showedOnStart = 0;
+    private int toShowCount = 0;
+
+    private bool disabledMoreBttn = false;
+
+    WebProjects webProjects;
+    DesktopProjects desktopProjects;
+    MobileProjects mobileProjects;
+
+
+    public void ShowWeb()
+    {
+        visibleWeb = true;
+        visibleMobile = visibleDesktop = disabledMoreBttn = false;
+
+
+        webProjects.projectsContainer.ResetShowedCount();
+    }
+
+    public void ShowDesktop()
+    {
+        visibleDesktop = true;
+        visibleMobile = visibleWeb = disabledMoreBttn = false;
+
+
+        desktopProjects.projectsContainer.ResetShowedCount();
+    }
+
+    public void ShowMobile()
+    {
+        visibleMobile = true;
+        visibleWeb = visibleDesktop = disabledMoreBttn = false;
+
+
+        mobileProjects.projectsContainer.ResetShowedCount();
+    }
+
+    public async void ShowMoreProjects()
+    {
+        showedOnStart = toShowCount = await JS.InvokeAsync<int>("GetToShowCount");
+        if (visibleWeb) webProjects.projectsContainer.ShowMoreProjects(toShowCount, showedOnStart);
+        else if (visibleDesktop) desktopProjects.projectsContainer.ShowMoreProjects(toShowCount, showedOnStart);
+        else mobileProjects.projectsContainer.ShowMoreProjects(toShowCount, showedOnStart);
+    }
+}

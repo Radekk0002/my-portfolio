@@ -1,0 +1,71 @@
+﻿@inject IJSRuntime JS
+@if (Visible)
+{
+    <div class="
+            @Classes
+            w-100
+            d-flex
+            flex-column flex-sm-row
+            justify-content-center
+            align-items-center
+            flex-wrap
+            "
+         style="@Styles">
+        @ChildContent
+
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string Styles { get; set; }
+
+    [Parameter]
+    public string Classes { get; set; }
+
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public EventCallback OnLoadedProjects { get; set; }
+
+    public static List<ProjectCard> cards = new List<ProjectCard>();
+
+    public int showedCount { get; set; }
+
+    private bool fadeout = false;
+
+
+    public void ResetShowedCount()
+    {
+        showedCount = 0;
+    }
+
+    public async void ShowMoreProjects(int count, int showedOnStart)
+    {
+
+        if (showedCount < cards.Count)
+        {
+            if (showedCount == 0) showedCount += showedOnStart;
+
+            for (int i = 0; i < cards.Count && i < showedCount + count; i++)
+                cards[i].Classes = "active";
+
+            showedCount += count;
+
+            if (showedCount >= cards.Count)
+                await OnLoadedProjects.InvokeAsync();
+
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JS.InvokeVoidAsync("ToggleMoreBttn");
+    }
+}

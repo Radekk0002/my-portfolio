@@ -1,0 +1,69 @@
+﻿@page "/"
+@namespace Portfolio.Server.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <meta name="description" content="Radosław Kisiel .Net Developer - Portfolio"/>
+    <title>Radosław Kisiel - Portfolio</title>
+    <base href="~/" />
+
+@*    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap"
+          rel="stylesheet" />*@
+
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="Portfolio.Server.styles.css" rel="stylesheet" />
+
+    <!--    Favicons-->
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="/favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+
+</head>
+<body>
+    <div id="loader" class="">
+        <div class="position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
+            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
+    <component type="typeof(App)" render-mode="Server" />
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="scripts/anime.min.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="_framework/blazor.server.js" autostart="false"></script>
+    <script>
+	    document.addEventListener("DOMContentLoaded", function() {
+		setTimeout(function() { 
+            document.querySelector('#loader').style.display = 'none';
+            Blazor.start(); 
+        },1800);
+	});
+    </script>
+</body>
+</html>

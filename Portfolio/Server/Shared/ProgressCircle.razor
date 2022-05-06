@@ -1,0 +1,26 @@
+﻿<div class="
+            bar
+            d-flex
+            flex-column
+            justify-content-center
+            align-items-center
+        ">
+    <svg>
+        <circle stroke="#3F444E"
+                stroke-width="6"
+                fill="transparent" />
+        <circle stroke="#E7E8E9"
+                stroke-width="6"
+                fill="transparent" />
+    </svg>
+    <h6 class="mt-2">@Title</h6>
+    <h6 class="progressValue">@Progress%</h6>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Progress { get; set; }
+}

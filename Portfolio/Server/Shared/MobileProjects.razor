@@ -1,0 +1,32 @@
+﻿@inject IJSRuntime JS
+<ProjectsContainer Classes="projectsContainer" @ref="projectsContainer" Visible="Visible" OnLoadedProjects="OnLoadedProjects">
+    <CascadingValue Value="this" IsFixed="true">
+        <ProjectCard Github="https://github.com/szellah/aidc-client" Path="./img/projects/mobile/stocktaking/main.png" BorderColor="blue">
+            <Text>
+                <h6>Stocktaking app</h6>
+                <p class="m-3">
+                    Project for classes. Mobile app that allows registered users to add, remove, edit articles and assign them to different locations.
+                    It was created in a group of 21 people with documentation and tests. 
+                </p>
+            </Text>
+            <Tech>
+                <img src="./img/techLogo/react.svg" alt="ikona React" width="25" height="25"/>
+                <img src="./img/techLogo/nodejs.svg" alt="ikona NodeJS" width="25" height="25"/>
+                <img src="./img/techLogo/css.svg" alt="ikona CSS" width="25" height="25"/>
+                <img src="./img/techLogo/mysql.svg" alt="ikona MySQL" width="25" height="25"/>
+            </Tech>
+        </ProjectCard>
+    </CascadingValue>
+</ProjectsContainer>
+
+
+@code {
+    internal ProjectsContainer projectsContainer;
+
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public EventCallback OnLoadedProjects { get; set; }
+
+}

@@ -1,0 +1,85 @@
+﻿@inject IJSRuntime JS
+
+@if (collapseShowNavBttn)
+{
+    <div class="overlay" @onclick="() => collapseNavMenu = true"></div>
+}
+<div id="showNavBttnContainer" class="position-fixed h-100">
+    <div id="showNavBttn" class="@ShowNavBttnCssClass position-absolute d-flex" @onclick="() => collapseShowNavBttn = true">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+
+<nav class="@NavMenuCssClass position-fixed">
+    <div class="">
+        <ul class="nav flex-column">
+            <li class="nav-item d-flex justify-content-between align-items-center" @onclick=@(()=>ScrollInto("welcome"))>
+                <div class="d-flex justify-content-between w-100 h-100">
+                    <p class="ml-3 ml-md-2 mb-0">Welcome</p><img src="/img/nav/home.svg" class="m-auto ml-md-2" alt="home" width="40" height="40"/>
+                </div>
+            </li>
+            <li class="nav-item d-flex justify-content-between align-items-center" @onclick=@(()=>ScrollInto("about"))>
+                <div class="d-flex justify-content-between w-100 h-100">
+                    <p class="ml-3 ml-md-2 mb-0">About</p><img src="/img/nav/globeAfrica.svg" class="m-auto ml-md-2" alt="globe" width="40" height="40"/>
+                </div>
+            </li>
+            <li class="nav-item d-flex justify-content-between align-items-center" @onclick=@(()=>ScrollInto("myProjects"))>
+                <div class="d-flex justify-content-between w-100 h-100">
+                    <p class="ml-3 ml-md-2 mb-0">Projects</p> <img src="/img/nav/addressCard.svg" class="m-auto ml-md-2" alt="address card" width="40" height="40"/>
+                </div>
+            </li>
+            <li class="nav-item d-flex justify-content-between align-items-center" @onclick=@(()=>ScrollInto("contact"))>
+                <div class="d-flex justify-content-between w-100 h-100">
+                    <p class="ml-3 ml-md-2 mb-0">Contact</p><img src="/img/nav/feather.svg" class="m-auto ml-md-2" alt="feather" width="40" height="40"/>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+@code {
+    private bool showOverlay = false;
+    private bool collapseShowNavBttn = false;
+    private bool collapseNavMenu = true;
+
+    private string ShowNavBttnCssClass => collapseShowNavBttn ? "hide" : "";
+    private string NavMenuCssClass => collapseNavMenu ? "" : "show";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("CallbackShowNavEndTransition", DotNetObjectReference.Create(this));
+            await JS.InvokeVoidAsync("CallbackShowNavBttnEndTransition", DotNetObjectReference.Create(this));
+        }
+    }
+
+    private async void ScrollInto(string id)
+    {
+        await JS.InvokeVoidAsync("ScrollToSection", id);
+    }
+
+
+    [JSInvokable]
+    public void ShowNavBttn()
+    {
+        if (collapseNavMenu && collapseShowNavBttn)
+        {
+            collapseShowNavBttn = false;
+            StateHasChanged();
+        }
+    }
+
+    [JSInvokable]
+    public void ShowNavMenu()
+    {
+        if (collapseShowNavBttn)
+        {
+            collapseNavMenu = false;
+            StateHasChanged();
+        }
+    }
+}

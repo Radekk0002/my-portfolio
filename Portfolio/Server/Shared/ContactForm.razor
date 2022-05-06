@@ -1,0 +1,185 @@
+﻿@using Portfolio.Shared
+@inject IJSRuntime JS
+@inject HttpClient Http
+
+
+<article id="contactWrapper">
+    <svg id="morph"
+         height="100%"
+         width="100%"
+         viewBox="0 0 1920 1080"
+         preserveAspectRatio="none">
+        <path class="morph"
+              d="M0,0H0S177.589-3.419,435.908,0C728.248,0,675.25-1.71,998.363,0s364.143-1.71,608.614,0,312.892,0,312.892,0H0Z"
+              fill="#151A27"></path>
+    </svg>
+    <div class="
+                position-absolute
+                w-100
+                h-100
+                d-flex
+                flex-column
+                align-items-center
+                    ">
+        <div id="formContainer"
+             class="
+                    d-flex
+                    flex-column
+                    align-items-center
+                    justify-content-center
+                    flex-grow-1
+                    p-4
+                        ">
+            <div style="min-height: 20px">
+                @if (readyToShowMessage)
+                {
+                    <p class="m-0" id="emailSendedMessage">@(isEmailSended ? "Email was sent succesfully" : "Something went wrong :(")</p>
+                    
+
+                }
+            </div>
+            <h3 class="mb-4">Contact with me</h3>
+            <div class="w-100 d-flex flex-column align-items-center">
+
+                <div class="
+                            d-flex
+                            flex-column
+                            justify-content-center
+                            align-content-center
+                                ">
+                    @if (step == 1)
+                    {
+
+                        <ContactFormInputBox Classes="@(invalid[0]?"invalid":"")" Text="Hi, my name is" Name="name" Placeholder="your name" @bind-InputValue="name" @bind-InputValue:event="InputValueChanged" />
+                        <ContactFormInputBox Classes="@(invalid[1]?"invalid":"")" Text="and my email is" Name="email" Placeholder="your email" @bind-InputValue="email" @bind-InputValue:event="InputValueChanged" />
+                    }
+                    else if (step == 2)
+                    {
+                        <ContactFormInputBox Classes="@(invalid[2]?"invalid":"")" Text="I'm interested in" Name="subject" Placeholder="blazor app" @bind-InputValue="subject" @bind-InputValue:event="InputValueChanged" />
+                    }
+                    else
+                    {
+                        <ContactFormInputBox Classes="@(invalid[3]?"invalid":"")" Text="My message:" Name="message" Placeholder="..." @bind-InputValue="message" @bind-InputValue:event="InputValueChanged" />
+                    }
+                </div>
+                <div class="
+                            d-flex
+                            justify-content-around
+                            align-items-center
+                            mt-4
+                                ">
+                    <div class="stepBttn pt-2 pb-2" @onclick="PreviousStep">Back</div>
+                    <div id="stepsContainer"
+                         class="d-flex ml-2 mr-2">
+                        <div id="step" style="transform: translateX(@((step-1)*100)%)"></div>
+                    </div>
+
+                    <div class="stepBttn pt-2 pb-2" @onclick="NextStep">@(step < 3?"Next":"Send")</div>
+
+                </div>
+            </div>
+        </div>
+        <div id="backToPageBttn"
+             class="ml-auto mr-auto mb-5 pt-2 pb-2" @onclick="BackToPage">
+            Back to Page
+        </div>
+    </div>
+</article>
+
+
+@code {
+    private string name, email, subject, message;
+    public int step;
+    private bool[] invalid;
+    private bool isEmailSended, readyToShowMessage;
+
+    protected override void OnInitialized()
+    {
+        name = email = subject = message = "";
+        step = 1;
+        invalid = new bool[4];
+        base.OnInitialized();
+    }
+
+    private async Task BackToPage()
+    {
+        await JS.InvokeVoidAsync("BackToPage");
+        await Task.Delay(300);
+        name = email = subject = message = "";
+        step = 1;
+        readyToShowMessage = false;
+        invalid = new bool[4];
+    }
+
+
+    private bool IsValid()
+    {
+        if (step == 1)
+        {
+
+            invalid[0] = name.Length == 0 || name.Length > 30;
+            invalid[1] = email.Length == 0;
+
+
+            try
+            {
+                if (invalid[1]) return false;
+                var tmp = new System.Net.Mail.MailAddress(email);
+            }
+            catch (FormatException)
+            {
+                invalid[1] = true;
+            }
+
+            return (invalid[0] && invalid[1]) == false;
+        }
+        else if (step == 2)
+        {
+            invalid[2] = subject.Length == 0 || subject.Length > 30;
+            return !invalid[2];
+        }
+        else
+        {
+            invalid[3] = message.Length == 0 || message.Length > 600;
+            return !invalid[3];
+        }
+    }
+
+    private void NextStep()
+    {
+        if (IsValid())
+        {
+            // Jeśli nie został jeszcze ani razu wysłany
+            if (step == 3 && !readyToShowMessage)
+                SendEmail();
+
+            invalid = new bool[4];
+            step = step < 3 ? step + 1 : step;
+        }
+    }
+
+    private void PreviousStep()
+    {
+        step = step > 1 ? step - 1 : step;
+    }
+
+    private async void SendEmail()
+    {
+        EmailModel email = new EmailModel();
+        email.Name = name;
+        email.Email = this.email;
+        email.Subject = subject;
+        email.Message = message;
+        var response = await Http.PostAsJsonAsync<EmailModel>("https://radekkisiel.pl/SendEmail", email);
+        isEmailSended = await response.Content.ReadFromJsonAsync<bool>();
+        readyToShowMessage = true;
+        if (isEmailSended)
+        {
+            StateHasChanged();
+            await Task.Delay(500);
+
+            await BackToPage();
+            StateHasChanged();
+        }
+    }
+}

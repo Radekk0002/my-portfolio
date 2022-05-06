@@ -1,0 +1,65 @@
+﻿@inject IJSRuntime JS
+
+<footer id="contact" class="mt-5 pt-4 pb-3 pb-md-4">
+    <div class="
+                    pt-4
+                    d-md-flex
+                    flex-row-reverse
+                    justify-content-md-center
+                    align-items-md-center
+                ">
+        <div id="contactMeBttn"
+             class="
+                        d-flex
+                        justify-content-around
+                        align-items-center
+                        m-auto
+                        mr-md-0
+                        ml-md-5
+                    " @onclick="ShowForm">
+            Contact me
+            <img src="./img/nav/feather.svg" alt="pióro" />
+        </div>
+        <div class="
+                        d-flex
+                        flex-column flex-md-row
+                        justify-content-center
+                        align-items-center
+                        mt-3 mt-md-0
+                    ">
+            <p class="mb-md-0 mr-md-3">You can find me here:</p>
+            <div class="d-flex justify-content-center align-items-center">
+                <SocialBttn Classes="socialBttn
+                                d-flex
+                                justify-content-around
+                                align-items-center
+                                mr-1"
+                            Text="LinkedIn"
+                            Link="https://www.linkedin.com/in/rados%C5%82aw-kisiel-05973818a/"
+                            Path="linkedin.png" />
+                <SocialBttn Classes="socialBttn
+                                d-flex
+                                justify-content-around
+                                align-items-center
+                                ml-1"
+                            Text="Github"
+                            Link="https://github.com/Radekk0002?tab=repositories"
+                            Path="github.svg" />
+            </div>
+        </div>
+    </div>
+
+    <p class="mt-4 mb-0">
+        Copyright &copy; 2021 Radosław Kisiel &lt;/&gt; Designed by
+        Dominik Obłoza, created by Me
+    </p>
+</footer>
+
+@code {
+    private async Task ShowForm()
+    {
+        await JS.InvokeVoidAsync("ShowForm");
+    }
+
+
+}

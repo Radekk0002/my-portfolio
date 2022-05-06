@@ -1,0 +1,66 @@
+﻿@inject IJSRuntime JS
+<ProjectsContainer Classes="projectsContainer" @ref="projectsContainer" Visible="Visible" OnLoadedProjects="OnLoadedProjects">
+    <CascadingValue Value="this" IsFixed="true">
+        <ProjectCard Github="https://github.com/Radekk0002/Notebook" Path="./img/projects/desktop/noteapp/noteapp.png" BorderColor="purple">
+            <Text>
+                <h6>Note App - WPF</h6>
+                <p class="d-flex justify-content-center align-items-center m-3">
+                    Application that allows you to take notes. You can save and load every txt file. On the right side are saved previously loaded files.
+                </p>
+            </Text>
+            <Tech>
+                <img src="./img/techLogo/cs.svg" alt="ikona c#" width="25" height="25"/>
+            </Tech>
+        </ProjectCard>
+
+        <ProjectCard Github="https://github.com/Radekk0002/Paint" Path="./img/projects/desktop/paint/paint.png" BorderColor="purple">
+            <Text>
+                <h6>Paint - WPF</h6>
+                <p class="d-flex justify-content-center align-items-center m-3">
+                    Simple paint that allows you to scribble in 4 different colours and with different thickness of brush. Click events (without draggable) create straightaways.
+                </p>
+            </Text>
+            <Tech>
+                <img src="./img/techLogo/cs.svg" alt="ikona c#" width="25" height="25"/>
+            </Tech>
+        </ProjectCard>
+        <ProjectCard Github="https://github.com/Radekk0002/Phone-Book" Path="./img/projects/desktop/phoneDiary/phoneDiary.png" BorderColor="purple">
+            <Text>
+                <h6>Phone Diary - WPF</h6>
+                <p class="d-flex justify-content-center align-items-center m-3">
+                    With this application you can save, edit and delete all your contacts
+                    (first name, last name, phone number, email and info about person).
+                    Contacts are saved in SQL Server database.
+                </p>
+            </Text>
+            <Tech>
+                <img src="./img/techLogo/cs.svg" alt="ikona c#" width="25" height="25"/>
+                <img src="./img/techLogo/mssql.svg" alt="ikona SQL Server" width="25" height="25"/>
+            </Tech>
+        </ProjectCard>
+        <ProjectCard Github="https://github.com/Radekk0002/TicTacToe" Path="./img/projects/desktop/smallProjects/tictactoe.png" BorderColor="purple">
+            <Text>
+                <h6>Tic Tac Toe - WPF</h6>
+                <p class="d-flex justify-content-center align-items-center m-3">
+                    A simple tic tac toe game.
+                </p>
+            </Text>
+            <Tech>
+                <img src="./img/techLogo/cs.svg" alt="ikona c#" width="25" height="25"/>
+            </Tech>
+        </ProjectCard>
+    </CascadingValue>
+</ProjectsContainer>
+
+
+@code {
+    internal ProjectsContainer projectsContainer;
+
+    [Parameter]
+    public bool Visible { get; set; }
+
+    [Parameter]
+    public EventCallback OnLoadedProjects { get; set; }
+
+
+}

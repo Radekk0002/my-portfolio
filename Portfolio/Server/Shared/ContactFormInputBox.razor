@@ -1,0 +1,46 @@
+﻿<div class="
+            d-flex
+            flex-column flex-sm-row
+            justify-content-center
+            align-items-center
+            mt-2
+                                    ">
+    <p class="ml-2 mb-2 mb-sm-0 mr-sm-2">
+        @Text
+    </p>
+    <input type="text"
+           placeholder="@Placeholder"
+           class="@Classes p-2"
+           name="@Name"  
+           value="@InputValue"
+           @oninput="OnInputChange"
+           />
+</div>
+
+@code {
+
+    [Parameter]
+    public string Classes { get; set; }
+
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public string Placeholder { get; set; }
+
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public string InputValue { get; set; }
+
+    [Parameter]
+    public EventCallback<string> InputValueChanged { get; set; }
+
+    private async Task OnInputChange(ChangeEventArgs args)
+    {
+        InputValue = (string)args.Value;
+        await InputValueChanged.InvokeAsync(InputValue);
+    }
+
+}
